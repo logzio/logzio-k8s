@@ -60,7 +60,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: fluentd
-        image: idohalevi/fluentd-kub8s-nosystemd
+        image: logzio/logzio-k8s:1.0.0
         env:
           - name:  LOGZIO_TOKEN
             value: "your logz.io account token"
