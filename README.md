@@ -17,7 +17,7 @@ The DaemonSet yaml file has two environment variables. Fluentd uses these variab
 | Environment variable | Description |
 |----------------------|-------------|
 |   LOGZIO_TOKEN       | [Logz.io account token](https://app.logz.io/#/dashboard/settings/general) |
-|   LOGZIO_URL         | Logz.io listener url (either listner.logz.io or listener-eu.logz.io) |
+|   LOGZIO_URL         | Logz.io listener url (either listener.logz.io or listener-eu.logz.io) |
 
 ### Logz.io endpoint configuration
 
