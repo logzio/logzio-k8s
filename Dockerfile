@@ -6,7 +6,7 @@ WORKDIR /home/fluent
 COPY Gemfile* /fluentd/
 RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
  && apt-get update \
- && apt-get install -y --no-install-recommends $buildDeps libjemalloc1 ruby-bundler \
+ && apt-get install -y --no-install-recommends $buildDeps libjemalloc1 \
  && bundle install --gemfile=/fluentd/Gemfile --path=/fluentd/vendor/bundle \
  && sudo gem sources --clear-all \
  && SUDO_FORCE_REMOVE=yes \
@@ -17,6 +17,4 @@ RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
            /home/fluent/.gem/ruby/2.3.0/cache/*.gem
 
 # Copy configuration files
-COPY ./conf/fluent.conf /fluentd/etc/
-COPY ./conf/systemd.conf /fluentd/etc/
-COPY ./conf/kubernetes.conf /fluentd/etc/
+COPY ./conf/*.conf /fluentd/etc/
