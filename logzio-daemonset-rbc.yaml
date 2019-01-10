@@ -60,12 +60,12 @@ spec:
         effect: NoSchedule
       containers:
       - name: fluentd
-        image: logzio/logzio-k8s:1.0.0
+        image: logzio/logzio-k8s:1.0.1
         env:
-          - name:  LOGZIO_TOKEN
-            value: "your logz.io account token"
-          - name:  LOGZIO_URL
-            value: "your logz.io host url"
+        - name:  LOGZIO_TOKEN
+          value: "your logz.io account token"
+        - name:  LOGZIO_URL
+          value: "your logz.io host url"
         resources:
           limits:
             memory: 200Mi
