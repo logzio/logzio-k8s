@@ -35,3 +35,14 @@ Here you can configure Logz.io Fluentd endpoint shipping behavior.
 | flush_interval | Interval, in seconds, to wait before invoking the next buffer flush | `5s`
 | max_retry_wait | Maximum interval, in seconds, to wait between retries | `30s`
 | num_threads | Number of threads to flush the buffer | `2`
+
+### Disable systemd input
+If you don't setup systemd in the container, fluentd shows following messages by default configuration.
+
+ ```
+[warn]: #0 [in_systemd_bootkube] Systemd::JournalError: No such file or directory retrying in 1s
+[warn]: #0 [in_systemd_kubelet] Systemd::JournalError: No such file or directory retrying in 1s
+[warn]: #0 [in_systemd_docker] Systemd::JournalError: No such file or directory retrying in 1s
+```
+
+ You can suppress these messages by setting `disable` to `FLUENTD_SYSTEMD_CONF` environment variable in your kubernetes configuration.
