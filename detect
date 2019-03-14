@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+BUILD_DIR=$1
+
+# Exit early if clearly not a Docker repo.
+if [ ! -f $BUILD_DIR/Dockerfile ]; then
+  exit 1
+fi
+
+echo Docker
