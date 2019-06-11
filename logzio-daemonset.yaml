@@ -22,10 +22,16 @@ spec:
       - name: fluentd
         image: logzio/logzio-k8s:latest
         env:
-        - name:  LOGZIO_TOKEN
-          value: "your logz.io account token"
-        - name:  LOGZIO_URL
-          value: "your logz.io host url"
+        - name: LOGZIO_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: logzio-secrets
+              key: logzio_token
+        - name: LOGZIO_URL
+          valueFrom:
+            secretKeyRef:
+              name: logzio-secrets
+              key: logzio_url
         resources:
           limits:
             memory: 200Mi

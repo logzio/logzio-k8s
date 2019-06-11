@@ -19,6 +19,18 @@ The DaemonSet yaml file has two environment variables. Fluentd uses these variab
 |   LOGZIO_TOKEN       | [Logz.io account token](https://app.logz.io/#/dashboard/settings/general) |
 |   LOGZIO_URL         | Logz.io listener url, If the account is in the EU region insert https://listener-eu.logz.io:8071. Otherwise, use https://listener.logz.io:8071. You can tell your account's region by checking your login URL - app.logz.io means you are in the US. app-eu.logz.io means you are in the EU |
 
+For improved security you should store the variables using Kubernetes secrets:
+
+```
+kubectl create secret generic logzio-secrets --from-literal=logzio_token='MY_LOGZIO_TOKEN' --from-literal=logzio_url='MY_LOGZIO_URL' -n kube-system
+```
+
+Then you can easily install the DaemonSet on your cluster:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbc.yaml
+```
+
 ### Logz.io endpoint configuration
 
 Here you can configure Logz.io Fluentd endpoint shipping behavior.
