@@ -51,7 +51,6 @@ spec:
       labels:
         k8s-app: fluentd-logzio
         version: v1
-        kubernetes.io/cluster-service: "true"
     spec:
       serviceAccount: fluentd
       serviceAccountName: fluentd
