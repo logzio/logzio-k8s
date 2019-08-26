@@ -12,12 +12,21 @@ This repository contains the configurations to deploy Fluentd as a DaemonSet. Th
 
 ### DaemonSet configuration
 
-The DaemonSet yaml file has two environment variables. Fluentd uses these variables when the container starts.
+Save your Logz.io shipping credentials as a Kubernetes secret.
 
-| Environment variable | Description |
-|----------------------|-------------|
-|   LOGZIO_TOKEN       | [Logz.io account token](https://app.logz.io/#/dashboard/settings/general) |
-|   LOGZIO_URL         | Logz.io listener url, If the account is in the EU region insert https://listener-eu.logz.io:8071. Otherwise, use https://listener.logz.io:8071. You can tell your account's region by checking your login URL - app.logz.io means you are in the US. app-eu.logz.io means you are in the EU |
+Replace `<<SHIPPING-TOKEN>>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to.
+
+Replace `<<LISTENER-HOST>>` with your region’s listener host (for example, listener.logz.io). For more information on finding your account’s region, see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html).
+
+```
+kubectl create secret generic logzio-logs-secret --from-literal=logzio-log-shipping-token='<<ACCOUNT-TOKEN>>' --from-literal=logzio-log-listener='https://<<LISTENER-HOST>>:8071' -n kube-system
+```
+
+Then you can easily install the DaemonSet on your cluster:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbc.yaml
+```
 
 ### Logz.io endpoint configuration
 
@@ -25,7 +34,7 @@ Here you can configure Logz.io Fluentd endpoint shipping behavior.
 
 | Variable | Description | Default |
 |------------------|----------------------------|---------|
-| endpoint_url | The url to Logz.io input | `#{ENV['LOGZIO_URL']}?token=#{ENV['LOGZIO_TOKEN']}`
+| endpoint_url | The url to Logz.io input | `#{ENV['LOGZIO_LOG_LISTENER']}?token=#{ENV['LOGZIO_LOG_SHIPPING_TOKEN']}`
 | output_include_time | To append a timestamp to your logs when they're processed, `true`. Otherwise, `false`. | `true`
 | buffer_type |  Specifies which plugin to use as the backend | `file`
 | buffer_path | Path of the buffer | `/var/log/Fluentd-buffers/stackdriver.buffer`
