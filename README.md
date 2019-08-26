@@ -24,8 +24,14 @@ kubectl create secret generic logzio-logs-secret --from-literal=logzio-log-shipp
 
 Then you can easily install the DaemonSet on your cluster:
 
+_RBAC_:
 ```
-kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbc.yaml
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac.yaml
+```
+
+_Non-RBAC_:
+```
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml
 ```
 
 ### Logz.io endpoint configuration
