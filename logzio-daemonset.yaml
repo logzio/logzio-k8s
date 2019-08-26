@@ -27,7 +27,7 @@ spec:
             secretKeyRef:
               name: logzio-logs-secret
               key: logzio-log-shipping-token
-        - name: LOGZIO_LOG_LISTENER_HOST
+        - name: LOGZIO_LOG_LISTENER
           valueFrom:
             secretKeyRef:
               name: logzio-logs-secret
