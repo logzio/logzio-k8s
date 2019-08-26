@@ -19,7 +19,7 @@ Replace <<SHIPPING-TOKEN>> with the token of the account you want to ship to.
 Replace <<LISTENER-HOST>> with your region’s listener host (for example, listener.logz.io). For more information on finding your account’s region, see Account region.
 
 ```
-kubectl create secret generic logzio-logs-secret --from-literal=logzio-log-shipping-token='<<ACCOUNT-TOKEN>>' --from-literal=logzio-log-listener-host='<<LISTENER-HOST>>' -n kube-system
+kubectl create secret generic logzio-logs-secret --from-literal=logzio-log-shipping-token='<<ACCOUNT-TOKEN>>' --from-literal=logzio-log-listener='https://<<LISTENER-HOST>>:8071' -n kube-system
 ```
 
 Then you can easily install the DaemonSet on your cluster:
