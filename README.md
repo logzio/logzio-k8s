@@ -14,7 +14,7 @@ This repository contains the configurations to deploy Fluentd as a DaemonSet. Th
 
 Save your Logz.io shipping credentials as a Kubernetes secret.
 
-Replace <<SHIPPING-TOKEN>> with the token of the account you want to ship to.
+Replace `<<SHIPPING-TOKEN>>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to.
 
 Replace <<LISTENER-HOST>> with your region’s listener host (for example, listener.logz.io). For more information on finding your account’s region, see Account region.
 
