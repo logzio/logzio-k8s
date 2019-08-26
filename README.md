@@ -34,7 +34,7 @@ Here you can configure Logz.io Fluentd endpoint shipping behavior.
 
 | Variable | Description | Default |
 |------------------|----------------------------|---------|
-| endpoint_url | The url to Logz.io input | `#{ENV['LOGZIO_LOG_LISTENER_HOST']}?token=#{ENV['LOGZIO_LOG_SHIPPING_TOKEN']}`
+| endpoint_url | The url to Logz.io input | `#{ENV['LOGZIO_LOG_LISTENER']}?token=#{ENV['LOGZIO_LOG_SHIPPING_TOKEN']}`
 | output_include_time | To append a timestamp to your logs when they're processed, `true`. Otherwise, `false`. | `true`
 | buffer_type |  Specifies which plugin to use as the backend | `file`
 | buffer_path | Path of the buffer | `/var/log/Fluentd-buffers/stackdriver.buffer`
