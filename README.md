@@ -16,7 +16,7 @@ Save your Logz.io shipping credentials as a Kubernetes secret.
 
 Replace `<<SHIPPING-TOKEN>>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to.
 
-Replace <<LISTENER-HOST>> with your region’s listener host (for example, listener.logz.io). For more information on finding your account’s region, see Account region.
+Replace `<<LISTENER-HOST>>` with your region’s listener host (for example, listener.logz.io). For more information on finding your account’s region, see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html).
 
 ```
 kubectl create secret generic logzio-logs-secret --from-literal=logzio-log-shipping-token='<<ACCOUNT-TOKEN>>' --from-literal=logzio-log-listener='https://<<LISTENER-HOST>>:8071' -n kube-system
