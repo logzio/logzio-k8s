@@ -44,7 +44,6 @@ metadata:
   labels:
     k8s-app: fluentd-logzio
     version: v1
-    kubernetes.io/cluster-service: "true"
 spec:
   template:
     metadata:
@@ -83,6 +82,8 @@ spec:
         - name: varlibdockercontainers
           mountPath: /var/lib/docker/containers
           readOnly: true
+        - name: config-source
+          mountPath: /fluentd/etc
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -91,3 +92,49 @@ spec:
       - name: varlibdockercontainers
         hostPath:
           path: /var/lib/docker/containers
+      - name: config-source
+        configMap:
+          name: fluent-config-map
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-config-map
+  namespace: kube-system
+  labels:
+    k8s-app: fluentd-logzio
+data:
+  fluent.conf: |-
+    @include "#{ENV['FLUENTD_SYSTEMD_CONF'] || 'systemd'}.conf"
+    @include kubernetes.conf
+    @include conf.d/*.conf
+
+    <match **>
+      @type logzio_buffered
+      @id out_logzio
+      endpoint_url "#{ENV['LOGZIO_LOG_LISTENER']}?token=#{ENV['LOGZIO_LOG_SHIPPING_TOKEN']"
+      output_include_time true
+      output_include_tags true
+      <buffer>
+        # Set the buffer type to file to improve the reliability and reduce the memory consumption
+        @type file
+        path /var/log/fluentd-buffers/stackdriver.buffer
+        # Set queue_full action to block because we want to pause gracefully
+        # in case of the off-the-limits load instead of throwing an exception
+        overflow_action block
+        # Set the chunk limit conservatively to avoid exceeding the GCL limit
+        # of 10MiB per write request.
+        chunk_limit_size 2M
+        # Cap the combined memory usage of this buffer and the one below to
+        # 2MiB/chunk * (6 + 2) chunks = 16 MiB
+        queue_limit_length 6
+        # Never wait more than 5 seconds before flushing logs in the non-error case.
+        flush_interval 2.5s
+        # Never wait longer than 30 seconds between retries.
+        retry_max_interval 30
+        # Disable the limit on the number of retries (retry forever).
+        retry_forever true
+        # Use multiple threads for processing.
+        flush_thread_count 4
+      </buffer>
+    </match>
