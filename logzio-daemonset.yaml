@@ -89,12 +89,12 @@ data:
         # 2MiB/chunk * (6 + 2) chunks = 16 MiB
         queue_limit_length 6
         # Never wait more than 5 seconds before flushing logs in the non-error case.
-        flush_interval 2.5s
+        flush_interval 5s
         # Never wait longer than 30 seconds between retries.
         retry_max_interval 30
         # Disable the limit on the number of retries (retry forever).
         retry_forever true
         # Use multiple threads for processing.
-        flush_thread_count 4
+        flush_thread_count 2
       </buffer>
     </match>
