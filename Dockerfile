@@ -1,4 +1,4 @@
-FROM fluent/fluentd-kubernetes-daemonset:v1.3-debian-logzio-1
+FROM fluent/fluentd-kubernetes-daemonset:v1.7-debian-logzio-1
 
 USER root
 WORKDIR /home/fluent
@@ -32,3 +32,4 @@ ENV LOGZIO_FLUSH_THREAD_COUNT "2"
 
 # Defaults value for system.conf
 ENV LOGZIO_LOG_LEVEL "info"
+

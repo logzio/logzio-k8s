@@ -30,6 +30,10 @@ spec:
             secretKeyRef:
               name: logzio-logs-secret
               key: logzio-log-listener
+        - name: FLUENTD_SYSTEMD_CONF
+          value: "disable"
+        - name: FLUENTD_PROMETHEUS_CONF
+          value: "disable"
         resources:
           limits:
             memory: 200Mi
