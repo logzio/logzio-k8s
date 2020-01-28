@@ -95,8 +95,7 @@ the [RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/
 or the [non-RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml)
 and open the file in your text editor.
 
-Customize the Fluentd configuration with the parameters shown below.
-The Fluentd configuration is below the `fluent.conf: |-` line, at the bottom of the file.
+Customize the integration environment variables configurations with the parameters shown below.
 
 **Parameters**
 
