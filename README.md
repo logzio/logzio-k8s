@@ -145,3 +145,15 @@ To suppress Fluentd system messages, set the `FLUENTD_SYSTEMD_CONF` environment 
 
 By default, latest images launch `prometheus` plugins to monitor fluentd.
 You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETHEUS_CONF` environment variable in your kubernetes configuration.
+
+### Changelog
+- v1.0.9
+  - Update base image
+  - Update libjemalloc package
+- v1.0.8
+  - Update deprecated APIs
+- v1.0.7
+  - Update dependencies
+- v1.0.6
+  - Use Kubernets secrets for Shipping Token and Listener URL.
+  - Fix log level

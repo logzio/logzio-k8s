@@ -1,4 +1,4 @@
-FROM fluent/fluentd-kubernetes-daemonset:v1.7-debian-logzio-1
+FROM fluent/fluentd-kubernetes-daemonset:v1.8.1-debian-logzio-1.0
 
 USER root
 WORKDIR /home/fluent
@@ -6,7 +6,7 @@ WORKDIR /home/fluent
 COPY Gemfile* /fluentd/
 RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
  && apt-get update \
- && apt-get install -y --no-install-recommends $buildDeps libjemalloc1 \
+ && apt-get install -y --no-install-recommends $buildDeps libjemalloc2 \
  && bundle install --gemfile=/fluentd/Gemfile --path=/fluentd/vendor/bundle \
  && sudo gem sources --clear-all \
  && SUDO_FORCE_REMOVE=yes \
@@ -32,4 +32,3 @@ ENV LOGZIO_FLUSH_THREAD_COUNT "2"
 
 # Defaults value for system.conf
 ENV LOGZIO_LOG_LEVEL "info"
-
