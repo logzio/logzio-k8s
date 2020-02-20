@@ -61,7 +61,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: fluentd
-        image: logzio/logzio-k8s:latest
+        image: logzio/logzio-k8s:1.1.0
         env:
         - name: LOGZIO_LOG_SHIPPING_TOKEN
           valueFrom:
