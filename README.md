@@ -148,7 +148,6 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 
 ### Changelog
 - v1.1.0
-  - Support nested jsons
   - Update deprecated conifg
 - v1.0.9
   - Update base image
