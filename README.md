@@ -147,6 +147,8 @@ By default, latest images launch `prometheus` plugins to monitor fluentd.
 You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETHEUS_CONF` environment variable in your kubernetes configuration.
 
 ### Changelog
+- v1.1.1
+  - Upgrade fluentd base image to v.1.10.4
 - v1.1.0
   - Update deprecated conifg
 - v1.0.9
