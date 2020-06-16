@@ -50,6 +50,11 @@ Or for a non-RBAC cluster:
 kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml
 ```
 
+For container runtime Containerd:
+```shell
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml
+```
+
 #### 3.  Check Logz.io for your logs
 
 Give your logs some time to get from your system to ours,
@@ -93,6 +98,7 @@ kubectl create secret generic logzio-logs-secret \
 Download either
 the [RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac.yaml)
 or the [non-RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml)
+or the [containerd Daemonset](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml)
 and open the file in your text editor.
 
 Customize the integration environment variables configurations with the parameters shown below.
@@ -126,6 +132,11 @@ For the non-RBAC DaemonSet:
 kubectl apply -f /path/to/logzio-daemonset.yaml
 ```
 
+For container runtime Containerd:
+```shell
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml
+```
+
 #### 4.  Check Logz.io for your logs
 
 Give your logs some time to get from your system to ours,
@@ -146,7 +157,11 @@ To suppress Fluentd system messages, set the `FLUENTD_SYSTEMD_CONF` environment 
 By default, latest images launch `prometheus` plugins to monitor fluentd.
 You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETHEUS_CONF` environment variable in your kubernetes configuration.
 
+
+
 ### Changelog
+- v1.1.3
+  - Support containerd.
 - v1.1.2
   - Fix token display issue.
 - v1.1.1
