@@ -134,7 +134,7 @@ kubectl apply -f /path/to/logzio-daemonset.yaml
 
 For container runtime Containerd:
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml
+kubectl apply -f /path/to/logzio-daemonset-containerd.yaml
 ```
 
 #### 4.  Check Logz.io for your logs
