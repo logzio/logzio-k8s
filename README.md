@@ -160,6 +160,8 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 
 
 ### Changelog
+- v1.1.4
+  - Add `fluent-plugin-kubernetes_metadata_filter`.
 - v1.1.3
   - Support containerd.
 - v1.1.2
