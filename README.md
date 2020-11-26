@@ -117,6 +117,7 @@ Customize the integration environment variables configurations with the paramete
 | LOGZIO_RETRY_MAX_INTERVAL | **Default**: `30s` <br>  Maximum interval, in seconds, to wait between retries. |
 | LOGZIO_FLUSH_THREAD_COUNT | **Default**: `2` <br>  Number of threads to flush the buffer. |
 | LOGZIO_LOG_LEVEL | **Default**: `info` <br> The log level for this container. |
+| INCLUDE_NAMESPACE | **Default**: `""` <br> Use if you wish to send logs from specific k8s namespaces. Should be in the following format: <br> `kubernetes.var.log.containers.**_<<NAMESPACE-TO-INCLUDE>>_** kubernetes.var.log.containers.**_<<ANOTHER-NAMESPACE>>_**`. |
 
 #### 3.  Deploy the DaemonSet
 
@@ -160,6 +161,11 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 
 
 ### Changelog
+- v1.1.5
+  - Bumped Fluentd version to v.1.11.5 (thanks @jeroenzeegers).
+  - Fixed docker image: changed workdir & removed wrong gem path (thanks @pete911).
+  - Configured Fluentd to exclude its own logs.
+  - Allow sending logs from specific k8s namespaces.
 - v1.1.4
   - Add `fluent-plugin-kubernetes_metadata_filter`.
 - v1.1.3
