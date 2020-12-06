@@ -1,7 +1,7 @@
-FROM fluent/fluentd-kubernetes-daemonset:v1.10.4-debian-logzio-1.0
+FROM fluent/fluentd-kubernetes-daemonset:v1.11.5-debian-logzio-1.0
 
 USER root
-WORKDIR /home/fluent
+WORKDIR /fluentd
 
 COPY Gemfile* /fluentd/
 RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
@@ -14,7 +14,7 @@ RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
                   -o APT::AutoRemove::RecommendsImportant=false \
                   $buildDeps \
  && rm -rf /var/lib/apt/lists/* \
-           /home/fluent/.gem/ruby/2.3.0/cache/*.gem
+ && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
 
 # Copy configuration files
 COPY ./conf/*.conf /fluentd/etc/
@@ -29,6 +29,7 @@ ENV LOGZIO_FLUSH_INTERVAL "5s"
 ENV LOGZIO_RETRY_MAX_INTERVAL "30"
 ENV LOGZIO_RETRY_FOREVER "true"
 ENV LOGZIO_FLUSH_THREAD_COUNT "2"
+ENV INCLUDE_NAMESPACE ""
 
 # Defaults value for system.conf
 ENV LOGZIO_LOG_LEVEL "info"
