@@ -166,7 +166,7 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 
 ### Changelog
 - v1.1.6
-  - Changed configuration that allow changing of SSL configurations.
+  - Allow changing of SSL configurations.
 - v1.1.5
   - Bumped Fluentd version to v.1.11.5 (thanks @jeroenzeegers).
   - Fixed docker image: changed workdir & removed wrong gem path (thanks @pete911).
