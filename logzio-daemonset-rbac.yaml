@@ -61,7 +61,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: fluentd
-        image: logzio/logzio-k8s:1.1.5
+        image: logzio/logzio-k8s:1.1.6
         env:
         - name: LOGZIO_LOG_SHIPPING_TOKEN
           valueFrom:
@@ -79,6 +79,8 @@ spec:
           value: "disable"
         - name: INCLUDE_NAMESPACE
           value: ""
+        - name: KUBERNETES_VERIFY_SSL
+          value: "true"
         resources:
           limits:
             memory: 200Mi

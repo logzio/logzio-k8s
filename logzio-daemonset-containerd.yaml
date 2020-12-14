@@ -81,6 +81,8 @@ spec:
           value: "kubernetes-containerd"
         - name: INCLUDE_NAMESPACE
           value: ""
+        - name: KUBERNETES_VERIFY_SSL
+          value: "true"
         resources:
           limits:
             memory: 200Mi
