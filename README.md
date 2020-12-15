@@ -118,6 +118,10 @@ Customize the integration environment variables configurations with the paramete
 | LOGZIO_FLUSH_THREAD_COUNT | **Default**: `2` <br>  Number of threads to flush the buffer. |
 | LOGZIO_LOG_LEVEL | **Default**: `info` <br> The log level for this container. |
 | INCLUDE_NAMESPACE | **Default**: `""`(All namespaces) <br> Use if you wish to send logs from specific k8s namespaces, space delimited. Should be in the following format: <br> `kubernetes.var.log.containers.**_<<NAMESPACE-TO-INCLUDE>>_** kubernetes.var.log.containers.**_<<ANOTHER-NAMESPACE>>_**`. |
+| KUBERNETES_VERIFY_SSL | **Default**: `true` <br> Enable to validate SSL certificates. |
+| FLUENT_FILTER_KUBERNETES_URL | **Default**: `nil` (doesn't appear in the pre-made Daemonset) <br> URL to the API server. Set this to retrieve further kubernetes metadata for logs from kubernetes API server. If not specified, environment variables `KUBERNETES_SERVICE_HOST` and `KUBERNETES_SERVICE_PORT` will be used if both are present which is typically true when running fluentd in a pod. <br> **Please note** that this parameter does NOT appear in the pre-made environment variable list in the Daemonset. If you wish to use & set this variable, you'll have to add it to the Daemonset's environment variables. |
+
+
 
 #### 3.  Deploy the DaemonSet
 
@@ -161,6 +165,8 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 
 
 ### Changelog
+- v1.1.6
+  - Allow changing of SSL configurations.
 - v1.1.5
   - Bumped Fluentd version to v.1.11.5 (thanks @jeroenzeegers).
   - Fixed docker image: changed workdir & removed wrong gem path (thanks @pete911).
