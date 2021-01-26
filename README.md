@@ -1,3 +1,4 @@
+
 # logzio-k8s
 
 For Kubernetes, a DaemonSet ensures that some or all nodes run a copy of a pod.
@@ -52,18 +53,18 @@ kubectl create secret generic logzio-logs-secret \
 For an RBAC cluster:
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac.yaml -f PATH_TO_CONFIG_MAPS
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
 Or for a non-RBAC cluster:
 
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml -f PATH_TO_CONFIG_MAPS
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
 For container runtime Containerd:
 ```shell
-kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml -f PATH_TO_CONFIG_MAPS
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
 #### 4.  Check Logz.io for your logs
@@ -140,7 +141,7 @@ Customize the integration environment variables configurations with the paramete
 | FLUENT_FILTER_KUBERNETES_URL | **Default**: `nil` (doesn't appear in the pre-made Daemonset) <br> URL to the API server. Set this to retrieve further kubernetes metadata for logs from kubernetes API server. If not specified, environment variables `KUBERNETES_SERVICE_HOST` and `KUBERNETES_SERVICE_PORT` will be used if both are present which is typically true when running fluentd in a pod. <br> **Please note** that this parameter does NOT appear in the pre-made environment variable list in the Daemonset. If you wish to use & set this variable, you'll have to add it to the Daemonset's environment variables. |
 | AUDIT_LOG_FORMAT | **Default**: `audit` <br> The format of your audit logs. If your audit logs are in json format, set to `audit-json`.  |
 
-If you wish to make any further changes in Fluentd's configuration, download the [configmap file](PATH-TO-CONFIGMAP), open the file in your text editor and make the changes that you need.
+If you wish to make any further changes in Fluentd's configuration, download the [configmap file](https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml), open the file in your text editor and make the changes that you need.
 
 
 #### 4.  Deploy the DaemonSet
