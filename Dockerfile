@@ -16,9 +16,6 @@ RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
 
-# Copy configuration files
-COPY ./conf/*.conf /fluentd/etc/
-
 # Default values for fluent.conf
 ENV LOGZIO_BUFFER_TYPE "file"
 ENV LOGZIO_BUFFER_PATH "/var/log/fluentd-buffers/stackdriver.buffer"
