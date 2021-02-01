@@ -13,8 +13,9 @@ You have two options for deployment:
 * [Custom configuration](#custom-config)
 
 **Important notes:**
-*  If you're running on k8s 1.19.3+, please use `logzio-daemonset-containerd.yaml`.
-* The API version of `ClusterRole` and `ClusterRoleBinding` in `logzio-daemonset-rbac.yaml` and `logzio-daemonset-containerd.yaml` is `v1`, since `v1beta1` was deprecated as of k8s 1.17. If you're running on an earlier k8s version, you may need to manually change the API version for those components.
+*   **K8S 1.19.3+**  - If you’re running on K8S 1.19.3+ or later, be sure to use the DaemonSet that supports a containerd at runtime. It can be downloaded and customized from[`logzio-daemonset-containerd.yaml`](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml).
+* **K8S 1.16 or earlier** - If you’re running K8S 1.16 or earlier, you may need to manually change the API version in your DaemonSet to `apiVersion: rbac.authorization.k8s.io/v1beta1`. The API versions of `ClusterRole` and `ClusterRoleBinding` are found in `logzio-daemonset-rbac.yaml` and `logzio-daemonset-containerd.yaml`. If you are running K8S 1.17 or later, the DaemonSet is set to use `apiVersion: rbac.authorization.k8s.io/v1` by default. No change is needed.
+* The latest version pulls the image from `logzio/logzio-fluentd`. Previous versions pulled the image from `logzio/logzio-k8s`.
 
 <div id="default-config">
 
@@ -26,7 +27,7 @@ However, you can deploy a custom configuration if your environment needs it.
 ### To deploy logzio-k8s
 
 #### 1. Create a monitoring namespace
-This is the namespace that the Daemonset will be deployed under.
+Your DaemonSet will be deployed under the namespace `monitoring`.
 
 ```shell
 kubectl create namespace monitoring
@@ -114,15 +115,12 @@ kubectl create secret generic logzio-logs-secret \
 
 #### 3.  Configure Fluentd
 
-Download either
-the [RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac.yaml)
-or the [non-RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml)
-or the [containerd Daemonset](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml)
-and open the file in your text editor.
+There are 3 DaemonSet options:  [RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac.yaml),  [non-RBAC DaemonSet](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml),  [Containerd](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml). Download the relevant DaemonSet and open it in your text editor to edit it.
 
-Customize the integration environment variables configurations with the parameters shown below.
+If you wish to make advanced changes in your Fluentd configuration, you can download and edit the  [configmap yaml file](https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml).
 
-**Parameters**
+**Environment variables**
+The following environment variables can be edited directly from the DaemonSet without editing the Configmap.
 
 | Parameter | Description |
 |---|---|
@@ -190,7 +188,7 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 - v1.0.0:
   - Fluentd configuration will be pulled from `configmap.yaml`.
   - Allow changing audit logs format via env var `AUDIT_LOG_FORMAT`.
-
+  - Update API version for RBAC Daemonsets.
 **logzio/logzio-k8s:**
 This docker image is deprecated. Please use the logzio/logzio-fluentd image instead.
 - v1.1.6
