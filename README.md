@@ -189,8 +189,9 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
   - Fluentd configuration will be pulled from `configmap.yaml`.
   - Allow changing audit logs format via env var `AUDIT_LOG_FORMAT`.
   - Update API version for RBAC Daemonsets.
-  
+
 **logzio/logzio-k8s:**
+
 This docker image is deprecated. Please use the logzio/logzio-fluentd image instead.
 - v1.1.6
   - Allow changing of SSL configurations.
