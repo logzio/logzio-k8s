@@ -74,7 +74,6 @@ spec:
       containers:
       - name: fluentd
         image: logzio/logzio-fluentd:1.0.0
-        imagePullPolicy: Always
         env:
         - name: LOGZIO_LOG_SHIPPING_TOKEN
           valueFrom:
