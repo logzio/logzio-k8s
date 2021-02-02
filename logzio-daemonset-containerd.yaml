@@ -3,14 +3,14 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: fluentd
-  namespace: kube-system
+  namespace: monitoring
 
 ---
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: fluentd
-  namespace: kube-system
+  namespace: monitoring
 rules:
 - apiGroups:
   - ""
@@ -24,7 +24,7 @@ rules:
 
 ---
 kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: fluentd
 roleRef:
@@ -34,13 +34,13 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: fluentd
-  namespace: kube-system
+  namespace: monitoring
 ---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluentd-logzio
-  namespace: kube-system
+  namespace: monitoring
   labels:
     k8s-app: fluentd-logzio
     version: v1
@@ -59,9 +59,22 @@ spec:
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
+      # Because the image's entrypoint requires to write on /fluentd/etc but we mount configmap there which is read-only,
+      # this initContainers workaround or other is needed.
+      # See https://github.com/fluent/fluentd-kubernetes-daemonset/issues/90
+      initContainers:
+        - name: copy-fluentd-config
+          image: busybox
+          command: ['sh', '-c', 'cp /config-volume/..data/* /fluentd/etc']
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config-volume
+            - name: fluentdconf
+              mountPath: /fluentd/etc
       containers:
       - name: fluentd
-        image: logzio/logzio-k8s:1.1.6
+        image: logzio/logzio-fluentd:1.0.0
+        imagePullPolicy: Always
         env:
         - name: LOGZIO_LOG_SHIPPING_TOKEN
           valueFrom:
@@ -77,12 +90,14 @@ spec:
           value: "disable"
         - name: FLUENTD_PROMETHEUS_CONF
           value: "disable"
-        - name: FLUENTD_KUBERNETES_CONTAINERD_CONF
-          value: "kubernetes-containerd"
         - name: INCLUDE_NAMESPACE
           value: ""
         - name: KUBERNETES_VERIFY_SSL
           value: "true"
+        - name: FLUENTD_KUBERNETES_CONTAINERD_CONF
+          value: "kubernetes-containerd"
+        - name: AUDIT_LOG_FORMAT
+          value: audit
         resources:
           limits:
             memory: 200Mi
@@ -93,8 +108,12 @@ spec:
         - name: varlog
           mountPath: /var/log
         - name: varlibdockercontainers
-          mountPath: /var/log/pods
+          mountPath: /var/lib/docker/containers
           readOnly: true
+        - name: config-volume
+          mountPath: /config-volume
+        - name: fluentdconf
+          mountPath: /fluentd/etc
       terminationGracePeriodSeconds: 30
       volumes:
       - name: varlog
@@ -102,4 +121,9 @@ spec:
           path: /var/log
       - name: varlibdockercontainers
         hostPath:
-          path: /var/log/pods
+          path: /var/lib/docker/containers
+      - name: config-volume
+        configMap:
+          name: fluentd-config
+      - name: fluentdconf
+        emptyDir: {}
