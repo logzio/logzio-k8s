@@ -73,7 +73,7 @@ spec:
               mountPath: /fluentd/etc
       containers:
       - name: fluentd
-        image: logzio/logzio-fluentd:1.0.0
+        image: logzio/logzio-fluentd:1.0.1
         env:
         - name: LOGZIO_LOG_SHIPPING_TOKEN
           valueFrom:

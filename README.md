@@ -185,6 +185,8 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 
 ### Changelog
 **logzio/logzio-fluentd**:
+- v1.0.1:
+  - Upgrade base image to 'fluent/fluentd-kubernetes-daemonset:v1.13-debian-logzio-amd64-1'.
 - v1.0.0:
   - Fluentd configuration will be pulled from `configmap.yaml`.
   - Allow changing audit logs format via env var `AUDIT_LOG_FORMAT`.
