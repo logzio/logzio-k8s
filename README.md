@@ -187,7 +187,7 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 ### Changelog
 **logzio/logzio-fluentd**:
 - v1.0.2:
-  - The docker image is now available for ARM architecture.
+  - The docker image is now available also for ARM architecture.
 - v1.0.1:
   - Upgrade base image to 'fluent/fluentd-kubernetes-daemonset:v1.13-debian-logzio-amd64-1'.
 - v1.0.0:
