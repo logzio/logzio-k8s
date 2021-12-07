@@ -16,6 +16,7 @@ You have two options for deployment:
 *   **K8S 1.19.3+**  - If you’re running on K8S 1.19.3+ or later, be sure to use the DaemonSet that supports a containerd at runtime. It can be downloaded and customized from[`logzio-daemonset-containerd.yaml`](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml).
 * **K8S 1.16 or earlier** - If you’re running K8S 1.16 or earlier, you may need to manually change the API version in your DaemonSet to `apiVersion: rbac.authorization.k8s.io/v1beta1`. The API versions of `ClusterRole` and `ClusterRoleBinding` are found in `logzio-daemonset-rbac.yaml` and `logzio-daemonset-containerd.yaml`. If you are running K8S 1.17 or later, the DaemonSet is set to use `apiVersion: rbac.authorization.k8s.io/v1` by default. No change is needed.
 * The latest version pulls the image from `logzio/logzio-fluentd`. Previous versions pulled the image from `logzio/logzio-k8s`.
+* **ARM architecture** is supported as of `logzio/logzio-fluentd:1.0.2`.
 
 <div id="default-config">
 
@@ -185,6 +186,8 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
 
 ### Changelog
 **logzio/logzio-fluentd**:
+- v1.0.2:
+  - The docker image is now available also for ARM architecture.
 - v1.0.1:
   - Upgrade base image to 'fluent/fluentd-kubernetes-daemonset:v1.13-debian-logzio-amd64-1'.
 - v1.0.0:
