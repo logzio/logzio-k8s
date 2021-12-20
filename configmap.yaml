@@ -10,7 +10,7 @@ data:
   fluent.conf: |
     @include "#{ENV['FLUENTD_SYSTEMD_CONF'] || 'systemd'}.conf"
     @include "#{ENV['FLUENTD_PROMETHEUS_CONF'] || 'prometheus'}.conf"
-    @include "#{ENV['FLUENTD_KUBERNETES_CONTAINERD_CONF'] || 'kubernetes'}.conf"
+    @include kubernetes.conf
     @include system.conf
     @include conf.d/*.conf
 
@@ -59,8 +59,21 @@ data:
       tag logzio.kubernetes.*
       read_from_head true
       <parse>
-        @type json
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
+        @type multi_format
+        <pattern>
+          # for docker cri
+          format json
+          time_key time
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+          keep_time_key true
+        </pattern>
+        <pattern>
+          # for containerd cri
+          # format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
+          format /^(?<time>.+) (?<stream>stdout|stderr) (?<logtag>[FP]) (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
+          keep_time_key true
+        </pattern>
       </parse>
     </source>
 
@@ -217,6 +230,8 @@ data:
       languages all
       multiline_flush_interval 0.1
     </match>
+
+    @include "partial-#{ENV['CRI']}.conf"
 
     # This adds type to the log && change key log to message
     <filter **>
@@ -283,199 +298,6 @@ data:
       tag bootkube
     </source>
 
-  kubernetes-containerd.conf: |
-    <label @FLUENT_LOG>
-      <match fluent.*>
-        @type null
-      </match>
-    </label>
-
-    <source>
-      @type tail
-      @id in_tail_container_logs
-      path /var/log/containers/*.log
-      pos_file /var/log/fluentd-containers.log.pos
-      exclude_path /var/log/containers/fluentd*.log
-      tag logzio.kubernetes.*
-      read_from_head true
-      <parse>
-        @type regexp
-        expression /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
-        time_format %Y-%m-%dT%H:%M:%S.%NZ
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_minion
-      path /var/log/salt/minion
-      pos_file /var/log/fluentd-salt.pos
-      tag logzio.salt
-      <parse>
-        @type regexp
-        expression /^(?<time>[^ ]* [^ ,]*)[^\[]*\[[^\]]*\]\[(?<severity>[^ \]]*) *\] (?<message>.*)$/
-        time_format %Y-%m-%d %H:%M:%S
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_startupscript
-      path /var/log/startupscript.log
-      pos_file /var/log/fluentd-startupscript.log.pos
-      tag logzio.startupscript
-      <parse>
-        @type syslog
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_docker
-      path /var/log/docker.log
-      pos_file /var/log/fluentd-docker.log.pos
-      tag logzio.docker
-      <parse>
-        @type regexp
-        expression /^time="(?<time>[^)]*)" level=(?<severity>[^ ]*) msg="(?<message>[^"]*)"( err="(?<error>[^"]*)")?( statusCode=($<status_code>\d+))?/
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_etcd
-      path /var/log/etcd.log
-      pos_file /var/log/fluentd-etcd.log.pos
-      tag logzio.etcd
-      <parse>
-        @type none
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_kubelet
-      multiline_flush_interval 5s
-      path /var/log/kubelet.log
-      pos_file /var/log/fluentd-kubelet.log.pos
-      tag logzio.kubelet
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_kube_proxy
-      multiline_flush_interval 5s
-      path /var/log/kube-proxy.log
-      pos_file /var/log/fluentd-kube-proxy.log.pos
-      tag logzio.kube-proxy
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_kube_apiserver
-      multiline_flush_interval 5s
-      path /var/log/kube-apiserver.log
-      pos_file /var/log/fluentd-kube-apiserver.log.pos
-      tag logzio.kube-apiserver
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_kube_controller_manager
-      multiline_flush_interval 5s
-      path /var/log/kube-controller-manager.log
-      pos_file /var/log/fluentd-kube-controller-manager.log.pos
-      tag logzio.kube-controller-manager
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_kube_scheduler
-      multiline_flush_interval 5s
-      path /var/log/kube-scheduler.log
-      pos_file /var/log/fluentd-kube-scheduler.log.pos
-      tag logzio.kube-scheduler
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_rescheduler
-      multiline_flush_interval 5s
-      path /var/log/rescheduler.log
-      pos_file /var/log/fluentd-rescheduler.log.pos
-      tag logzio.rescheduler
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_glbc
-      multiline_flush_interval 5s
-      path /var/log/glbc.log
-      pos_file /var/log/fluentd-glbc.log.pos
-      tag logzio.glbc
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    <source>
-      @type tail
-      @id in_tail_cluster_autoscaler
-      multiline_flush_interval 5s
-      path /var/log/cluster-autoscaler.log
-      pos_file /var/log/fluentd-cluster-autoscaler.log.pos
-      tag logzio.cluster-autoscaler
-      <parse>
-        @type kubernetes
-      </parse>
-    </source>
-
-    @include "#{ENV['AUDIT_LOG_FORMAT'] || 'audit'}.conf"
-
-    # This handles multiline exceptions automatically: https://github.com/GoogleCloudPlatform/fluent-plugin-detect-exceptions
-    <match logzio.**>
-      @type detect_exceptions
-      remove_tag_prefix logzio
-      message log
-      languages all
-      multiline_flush_interval 0.1
-    </match>
-
-    # This adds type to the log && change key log to message
-    <filter **>
-      @type record_modifier
-      <record>
-        type  k8s
-        message ${record["log"]}
-      </record>
-      remove_keys log
-    </filter>
-
-    <filter kubernetes.**>
-      @type kubernetes_metadata
-      @id filter_kube_metadata
-      kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
-      verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
-    </filter>
-
   audit.conf: |
     # Example:
     # 2017-02-09T00:15:57.992775796Z AUDIT: id="90c73c7c-97d6-4b65-9461-f94606ff825f" ip="104.132.1.72" method="GET" user="kubecfg" as="<self>" asgroups="<lookup>" namespace="default" uri="/api/v1/namespaces/default/pods"
@@ -516,3 +338,27 @@ data:
         time_format %Y-%m-%dT%T.%L%Z
       </parse>
     </source>
+
+  partial-docker.conf: |
+    # Concat docker cri partial log
+    # https://github.com/fluent-plugins-nursery/fluent-plugin-concat
+    # https://github.com/moby/moby/issues/34620#issuecomment-619369707
+    <filter **>
+      @type concat
+      key log
+      use_first_timestamp true
+      multiline_end_regexp /\n$/
+      separator ""
+    </filter>
+
+  partial-containerd.conf: |
+    # Concat containerd cri partial log
+    # https://github.com/fluent/fluentd-kubernetes-daemonset/issues/412#issuecomment-636536767
+    <filter **>
+      @type concat
+      key log
+      use_first_timestamp true
+      partial_key logtag
+      partial_value P
+      separator ""
+    </filter>

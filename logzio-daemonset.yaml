@@ -56,6 +56,8 @@ spec:
           value: "true"
         - name: AUDIT_LOG_FORMAT
           value: audit
+        - name: CRI
+          value: "docker"
         resources:
           limits:
             memory: 200Mi

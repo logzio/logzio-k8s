@@ -139,6 +139,7 @@ The following environment variables can be edited directly from the DaemonSet wi
 | KUBERNETES_VERIFY_SSL | **Default**: `true` <br> Enable to validate SSL certificates. |
 | FLUENT_FILTER_KUBERNETES_URL | **Default**: `nil` (doesn't appear in the pre-made Daemonset) <br> URL to the API server. Set this to retrieve further kubernetes metadata for logs from kubernetes API server. If not specified, environment variables `KUBERNETES_SERVICE_HOST` and `KUBERNETES_SERVICE_PORT` will be used if both are present which is typically true when running fluentd in a pod. <br> **Please note** that this parameter does NOT appear in the pre-made environment variable list in the Daemonset. If you wish to use & set this variable, you'll have to add it to the Daemonset's environment variables. |
 | AUDIT_LOG_FORMAT | **Default**: `audit` <br> The format of your audit logs. If your audit logs are in json format, set to `audit-json`.  |
+| CRI | The CRI of the cluster. In `logzio-daemonset` & `logzio-daemonset-rbac` is set to `docker`, and in `logzio-daemonset-containerd` is set to `containerd`. The configmap uses this var to determin which includes it needs to make for the fluent.conf file, when configuration needs to be adjusted by the CRI. |
 
 If you wish to make any further changes in Fluentd's configuration, download the [configmap file](https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml), open the file in your text editor and make the changes that you need.
 
