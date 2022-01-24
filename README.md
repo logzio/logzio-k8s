@@ -1,8 +1,8 @@
 
 # logzio-k8s
 
+This implementation uses a Fluentd DaemonSet to collect Kubernetes logs.
 For Kubernetes, a DaemonSet ensures that some or all nodes run a copy of a pod.
-This implementation is uses a Fluentd DaemonSet to collect Kubernetes logs.
 Fluentd is flexible enough and has the proper plugins to distribute logs to different third parties such as Logz.io.
 
 The logzio-k8s image comes pre-configured for Fluentd to gather all logs from the Kubernetes node environment and append the proper metadata to the logs.
