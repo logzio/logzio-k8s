@@ -176,7 +176,7 @@ see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/
 
 ## Sending logs from nodes with taints
 
-If you want to ship logs from any of the nodes that have a taint, make sure that the taint key values are listed in your in your daemonset/deployment configuration as follows:
+If you want to ship logs from any of the nodes that have a taint, make sure that the taint key values are listed in your in your daemonset configuration as follows:
 
 ```yaml
 tolerations:
