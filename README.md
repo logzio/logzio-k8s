@@ -192,6 +192,11 @@ To determine if a node uses taints as well as to display the taint keys, run:
 kubectl get nodes -o json | jq ".items[]|{name:.metadata.name, taints:.spec.taints}"
 ```
 
+## Troubleshooting
+
+See the [troubleshooting document](https://github.com/logzio/logzio-k8s/blob/master/troubleshooting.md) if you encounter error while running this integration.
+
+
 ## Disabling systemd input
 
 To suppress Fluentd system messages, set the `FLUENTD_SYSTEMD_CONF` environment variable to `disable` in your Kubernetes environment.
@@ -209,6 +214,9 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
   - The docker image is now available also for ARM architecture.
 - v1.0.1:
   - Upgrade base image to 'fluent/fluentd-kubernetes-daemonset:v1.13-debian-logzio-amd64-1'.
+
+<details>
+  <summary markdown="span"> Expand to check old versions </summary>
 - v1.0.0:
   - Fluentd configuration will be pulled from `configmap.yaml`.
   - Allow changing audit logs format via env var `AUDIT_LOG_FORMAT`.
@@ -244,3 +252,4 @@ This docker image is deprecated. Please use the logzio/logzio-fluentd image inst
 - v1.0.6
   - Use Kubernets secrets for Shipping Token and Listener URL.
   - Fix log level
+</details>
