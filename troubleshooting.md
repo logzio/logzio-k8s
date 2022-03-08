@@ -1,6 +1,6 @@
 # Troubleshooting
 
-This document contains some guides for handling errors that you may encounter when trying to run this solution.
+This document contains some guidelines for handling errors that you may encounter when trying to run this solution.
 
 ### Add extra mounts:
 
