@@ -1,9 +1,7 @@
 
 # logzio-k8s
 
-This implementation uses a Fluentd DaemonSet to collect Kubernetes logs.
-For Kubernetes, a DaemonSet ensures that some or all nodes run a copy of a pod.
-Fluentd is flexible enough and has the proper plugins to distribute logs to different third parties such as Logz.io.
+This implementation uses a Fluentd DaemonSet to collect Kubernetes logs. For Kubernetes, a DaemonSet ensures that some or all nodes run a copy of a pod. Fluentd is flexible enough and has the proper plugins to distribute logs to different third parties, such as Logz.io.
 
 The logzio-k8s image comes pre-configured for Fluentd to gather all logs from the Kubernetes node environment and append the proper metadata to the logs.
 
@@ -13,7 +11,7 @@ You have two options for deployment:
 * [Custom configuration](#custom-config)
 
 **Important notes:**
-*   **K8S 1.19.3+**  - If you’re running on K8S 1.19.3+ or later, be sure to use the DaemonSet that supports a containerd at runtime. It can be downloaded and customized from[`logzio-daemonset-containerd.yaml`](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml).
+* **K8S 1.19.3+**  - If you’re running on K8S 1.19.3+ or later, be sure to use the DaemonSet that supports a containerd at runtime. It can be downloaded and customized from[`logzio-daemonset-containerd.yaml`](https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml).
 * **K8S 1.16 or earlier** - If you’re running K8S 1.16 or earlier, you may need to manually change the API version in your DaemonSet to `apiVersion: rbac.authorization.k8s.io/v1beta1`. The API versions of `ClusterRole` and `ClusterRoleBinding` are found in `logzio-daemonset-rbac.yaml` and `logzio-daemonset-containerd.yaml`. If you are running K8S 1.17 or later, the DaemonSet is set to use `apiVersion: rbac.authorization.k8s.io/v1` by default. No change is needed.
 * The latest version pulls the image from `logzio/logzio-fluentd`. Previous versions pulled the image from `logzio/logzio-k8s`.
 * **ARM architecture** is supported as of `logzio/logzio-fluentd:1.0.2`.
@@ -22,33 +20,32 @@ You have two options for deployment:
 
 ## Deploy logzio-k8s with default configuration
 
-For most environments, we recommend using the default configuration.
-However, you can deploy a custom configuration if your environment needs it.
+For most environments, we recommend using the default configuration. However, you can deploy a custom configuration if your environment needs it.
 
 ### To deploy logzio-k8s
 
 #### 1. Create a monitoring namespace
+  
 Your DaemonSet will be deployed under the namespace `monitoring`.
 
 ```shell
 kubectl create namespace monitoring
 ```
 
-#### 2.  Store your Logz.io credentials
+#### 2. Store your Logz.io credentials
 
 Save your Logz.io shipping credentials as a Kubernetes secret.
 
-Replace `<<SHIPPING-TOKEN>>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to. <br>
-Replace `<<LISTENER-HOST>>` with your region's listener host (for example, `listener.logz.io`).
-For more information on finding your account's region,
-see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html).
-
 ```shell
 kubectl create secret generic logzio-logs-secret \
---from-literal=logzio-log-shipping-token='<<SHIPPING-TOKEN>>' \
+--from-literal=logzio-log-shipping-token='<<LOG-SHIPPING-TOKEN>>' \
 --from-literal=logzio-log-listener='https://<<LISTENER-HOST>>:8071' \
 -n monitoring
 ```
+
+* Replace `<<LOG-SHIPPING-TOKEN>>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to. 
+* Replace `<<LISTENER-HOST>>` with your region's listener host (for example, `listener.logz.io`). For more information on finding your account's region,
+see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html).
 
 #### 3.  Deploy the DaemonSet
 
@@ -58,24 +55,23 @@ For an RBAC cluster:
 kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
-Or for a non-RBAC cluster:
+For a non-RBAC cluster:
 
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
 For container runtime Containerd:
+  
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
 #### 4.  Check Logz.io for your logs
 
-Give your logs some time to get from your system to ours,
-and then open [Kibana](https://app.logz.io/#/dashboard/kibana).
+Give your logs some time to get from your system to ours, and then open [Kibana](https://app.logz.io/#/dashboard/kibana).
 
-If you still don't see your logs,
-see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html).
+If you still don't see your logs, see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html).
 
 </div>
 <!-- tab:end -->
@@ -86,13 +82,13 @@ see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/
 
 ## Deploy logzio-k8s with custom configuration
 
-You can customize the configuration of the Fluentd container.
-This is done using a ConfigMap that overwrites the default DaemonSet.
+You can customize the configuration of the Fluentd container. This is done using a ConfigMap that overwrites the default DaemonSet.
 
 ### To deploy logzio-k8s
 
 #### 1. Create a monitoring namespace
-This is the namespace that the Daemonset will be deployed under.
+  
+This is the namespace where the Daemonset will be deployed.
 
 ```shell
 kubectl create namespace monitoring
@@ -102,17 +98,15 @@ kubectl create namespace monitoring
 
 Save your Logz.io shipping credentials as a Kubernetes secret.
 
-Replace `<<SHIPPING-TOKEN>>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to. <br>
-Replace `<<LISTENER-HOST>>` with your region's listener host (for example, `listener.logz.io`).
-For more information on finding your account's region,
-see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html).
-
 ```shell
 kubectl create secret generic logzio-logs-secret \
 --from-literal=logzio-log-shipping-token='<<SHIPPING-TOKEN>>' \
 --from-literal=logzio-log-listener='https://<<LISTENER-HOST>>:8071' \
 -n monitoring
 ```
+
+* Replace `<<LOG-SHIPPING-TOKEN>>` with the [token](https://app.logz.io/#/dashboard/settings/general) of the account you want to ship to. 
+* Replace `<<LISTENER-HOST>>` with your region's listener host (for example, `listener.logz.io`). For more information on finding your account's region, see [Account region](https://docs.logz.io/user-guide/accounts/account-region.html).
 
 #### 3.  Configure Fluentd
 
@@ -121,6 +115,7 @@ There are 3 DaemonSet options:  [RBAC DaemonSet](https://raw.githubusercontent.c
 If you wish to make advanced changes in your Fluentd configuration, you can download and edit the  [configmap yaml file](https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml).
 
 **Environment variables**
+  
 The following environment variables can be edited directly from the DaemonSet without editing the Configmap.
 
 | Parameter | Description |
@@ -159,17 +154,16 @@ kubectl apply -f /path/to/logzio-daemonset.yaml -f /path/to/configmap.yaml
 ```
 
 For container runtime Containerd:
+  
 ```shell
 kubectl apply -f /path/to/logzio-daemonset-containerd.yaml -f /path/to/configmap.yaml
 ```
 
 #### 5.  Check Logz.io for your logs
 
-Give your logs some time to get from your system to ours,
-and then open [Kibana](https://app.logz.io/#/dashboard/kibana).
+Give your logs some time to get from your system to ours, and then open [Kibana](https://app.logz.io/#/dashboard/kibana).
 
-If you still don't see your logs,
-see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html).
+If you still don't see your logs, see [log shipping troubleshooting](https://docs.logz.io/user-guide/log-shipping/log-shipping-troubleshooting.html).
 
 </div>
 <!-- tab:end -->
@@ -192,14 +186,18 @@ To determine if a node uses taints as well as to display the taint keys, run:
 kubectl get nodes -o json | jq ".items[]|{name:.metadata.name, taints:.spec.taints}"
 ```
 
+## Troubleshooting
+
+See the [troubleshooting document](https://github.com/logzio/logzio-k8s/blob/master/troubleshooting.md) if you encounter error while running this integration.
+
+
 ## Disabling systemd input
 
 To suppress Fluentd system messages, set the `FLUENTD_SYSTEMD_CONF` environment variable to `disable` in your Kubernetes environment.
 
 ### Disable prometheus input plugins
 
-By default, latest images launch `prometheus` plugins to monitor fluentd.
-You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETHEUS_CONF` environment variable in your kubernetes configuration.
+By default, latest images launch `prometheus` plugins to monitor fluentd. You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETHEUS_CONF` environment variable in your kubernetes configuration.
 
 
 
@@ -209,6 +207,9 @@ You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETH
   - The docker image is now available also for ARM architecture.
 - v1.0.1:
   - Upgrade base image to 'fluent/fluentd-kubernetes-daemonset:v1.13-debian-logzio-amd64-1'.
+
+<details>
+  <summary markdown="span"> Expand to check old versions </summary>
 - v1.0.0:
   - Fluentd configuration will be pulled from `configmap.yaml`.
   - Allow changing audit logs format via env var `AUDIT_LOG_FORMAT`.
@@ -244,3 +245,4 @@ This docker image is deprecated. Please use the logzio/logzio-fluentd image inst
 - v1.0.6
   - Use Kubernets secrets for Shipping Token and Listener URL.
   - Fix log level
+</details>
