@@ -2,19 +2,23 @@
 
 This document contains some guidelines for handling errors that you may encounter when trying to run this solution.
 
-### Add extra mounts:
+## Problem: /file/path.log unreadable
 
-If you see this error when running Fluentd:
+The following error appears when running Fluentd:
 
 ```shell
 /file/path.log unreadable. it is excluded and would be examined next time
 ```
 
-It might be because you need to add more volume and volume mount to your Daemonset. Follow these steps:
+### Possible cause
+
+You may need to add more volume and volume mount to your Daemonset.
+
+### Suggested remedy
 
 #### Step 1 - Check on which node your pod is running
 
-You'll need to find out on which node your Fluentd pod with the errors is running on. To do so use this command:
+Find out on which node your Fluentd pod with the errors is running. To do so, use this command:
 
 ```shell
 kubectl -n <<NAMESPACE>> get pod <<FLUENTD-POD-NAME>> -owide
@@ -22,7 +26,7 @@ kubectl -n <<NAMESPACE>> get pod <<FLUENTD-POD-NAME>> -owide
 
 #### Step 2 - Connect to the node
 
-You'll need to connect to the node you found in the previous step (ssh, etc...).
+Connect to the node you found in the previous step (ssh, etc...).
 
 #### Step 3 - Find the log's path:
 
@@ -38,7 +42,7 @@ cd /var/log/containers
 ls -ltr
 ```
 
-This command should present you a list of your log files and their symlinks. It should look something like this:
+This command should present you a list of your log files and their symlinks, for example:
 
 ```shell
 some-log-file.log -> /var/log/pods/file_name.log
@@ -50,17 +54,17 @@ some-log-file.log -> /var/log/pods/file_name.log
 ls -ltr /var/log/pods/file_name.log
 ```
 
-Again, this command will output the file and its symlink. For example:
+Again, this command will output the file and its symlink, or example:
 
 ```shell
 /var/log/pods/file_name.log -> /some/other/path/file.log
 ```
 
-This directory (`/some/other/path`) is the directory where your log files mounted at the host. You'll need to add that path to your Daemonset.
+This directory (`/some/other/path`) is the directory where your log files are mounted at the host. You'll need to add that path to your Daemonset.
 
-#### Step 4 - Add the mount path to your daemonset
+#### Step 4 - Add the mount path to your Daemonset
 
-1. Open your daemonset in your preffered text editor.
+1. Open your Daemonset in your preffered text editor.
 
 2. In the `volumeMounts` section, add the following:
 
@@ -70,7 +74,7 @@ This directory (`/some/other/path`) is the directory where your log files mounte
   readOnly: true
 ```
 
-Replace `<<MOUNT-PATH>>` with the directory path you've found in step 3.
+Replace `<<MOUNT-PATH>>` with the directory path you found in step 3.
 
 3. In the `volumes` section, add the following:
 
@@ -80,12 +84,18 @@ Replace `<<MOUNT-PATH>>` with the directory path you've found in step 3.
   	path: <<MOUNT-PATH>>
 ```
 
-Replace `<<MOUNT-PATH>>` with the directory path you've found in step 3.
+Replace `<<MOUNT-PATH>>` with the directory path you found in step 3.
 
-Save your changes.
+4. Save the changes.
 
 #### Step 5 - Deploy your new Daemonset.
 
-Remove your previous Daemonset from the cluster, and apply your new one (note that applying the new Daemonset without removing the old one won't apply the changes).
+Remove your previous Daemonset from the cluster, and apply the new one.
 
-### Step 6 - Check your Fluentd pods to ensure that the error is gone
+NOTE: Applying the new Daemonset without removing the old one will not apply the changes.
+
+#### Step 6 - Check your Fluentd pods to ensure that the error is gone
+
+```shell
+kubectl -n <<NAMESPACE>> logs <<POD-NAME>>
+```
