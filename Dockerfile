@@ -1,6 +1,4 @@
-FROM fluent/fluentd-kubernetes-daemonset:v1.13-debian-logzio-amd64-1
-# to build an arm version, comment the above FROM statement, and uncomment the following line
-# FROM logzio/fluentd-kubernetes-daemonset-arm:v1.13-debian-logzio-arm
+FROM fluent/fluentd-kubernetes-daemonset:v1.14-debian-logzio-amd64-1
 
 USER root
 WORKDIR /fluentd
