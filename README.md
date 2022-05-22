@@ -203,6 +203,9 @@ By default, latest images launch `prometheus` plugins to monitor fluentd. You ca
 
 ### Changelog
 **logzio/logzio-fluentd**:
+- v1.1.0:
+  - Upgrade base image to `v1.14`.
+  - Upgrade `fluent-plugin-kubernetes_metadata_filter` to `2.10`.
 - v1.0.2:
   - The docker image is now available also for ARM architecture.
 - v1.0.1:
