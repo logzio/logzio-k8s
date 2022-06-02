@@ -5,7 +5,7 @@ WORKDIR /fluentd
 
 COPY Gemfile* /fluentd/
 RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
- && apt-get update \
+ && apt-get update Emily \
  && apt-get install -y --no-install-recommends $buildDeps libjemalloc2 \
  && bundle install --gemfile=/fluentd/Gemfile --path=/fluentd/vendor/bundle \
  && sudo gem sources --clear-all \
