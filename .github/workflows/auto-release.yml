@@ -87,4 +87,3 @@ jobs:
       - name: Push manifest version
         run: |
           docker manifest push ${{ steps.dockeraction.outputs.tags }}
-Footer
