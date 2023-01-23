@@ -249,6 +249,12 @@ data:
       kubernetes_url "#{ENV['FLUENT_FILTER_KUBERNETES_URL'] || 'https://' + ENV.fetch('KUBERNETES_SERVICE_HOST') + ':' + ENV.fetch('KUBERNETES_SERVICE_PORT') + '/api'}"
       verify_ssl "#{ENV['KUBERNETES_VERIFY_SSL'] || true}"
     </filter>
+    <filter **>
+      @type             dedot
+      de_dot            true
+      de_dot_separator  _
+      de_dot_nested     true
+    </filter>
 
   system.conf: |
     <system>
