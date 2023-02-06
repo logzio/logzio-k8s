@@ -9,7 +9,7 @@ metadata:
 data:
   fluent.conf: |
     @include "#{ENV['FLUENTD_SYSTEMD_CONF'] || 'systemd'}.conf"
-    @include prometheus.conf"
+    @include prometheus.conf
     @include kubernetes.conf
     @include system.conf
     @include conf.d/*.conf
