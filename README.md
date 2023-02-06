@@ -67,6 +67,13 @@ For container runtime Containerd:
 kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
+For monitoring fluentd:
+add the suffix `-monitoring` to the desired configmap and daemonset templates.
+i.e:
+```shell
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd-monitoring.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap-monitoring.yaml
+```
+
 #### 4.  Check Logz.io for your logs
 
 Give your logs some time to get from your system to ours, and then open [Kibana](https://app.logz.io/#/dashboard/kibana).
@@ -195,14 +202,19 @@ See the [troubleshooting document](https://github.com/logzio/logzio-k8s/blob/mas
 
 To suppress Fluentd system messages, set the `FLUENTD_SYSTEMD_CONF` environment variable to `disable` in your Kubernetes environment.
 
-### Disable prometheus input plugins
+### Enable prometheus monitoring
 
-By default, latest images launch `prometheus` plugins to monitor fluentd. You can disable prometheus input plugin by setting `disable` to `FLUENTD_PROMETHEUS_CONF` environment variable in your kubernetes configuration.
+In order to monitor fluentd and collect input & output metrics. You can 
+deploy `logzio-daemonset-containerd-monitoring` or `logzio-daemonset-rbac-monitoring`, and `configmap-monitoring.yaml`.
+These templates collects and exposes fluentd metrics on port `24231`, `/metrics` endpoint. The templates contains annotations to easly ship when using promehteus shipper.
 
 
 
 ### Changelog
 **logzio/logzio-fluentd**:
+- v1.3.1:
+  - Added `fluent-plugin-prometheus`.
+  - Added `logzio-daemonset-containerd-monitoring`,  `logzio-daemonset-rbac-monitoring` and `configmap-monitoring.yaml` which exposes fluentd metrics on the pods port `24231`, `/metrics` endpoint
 - v1.3.0:
   - Added plugin `fluent-plugin-dedot_filter`.
   - Updated image in daemonset templates, increased memory and cpu requirements.
