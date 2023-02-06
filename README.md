@@ -67,11 +67,14 @@ For container runtime Containerd:
 kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap.yaml
 ```
 
-For monitoring fluentd:
-add the suffix `-monitoring` to the desired configmap and daemonset templates.
-i.e:
+For monitoring fluentd with runtime Containerd:
 ```shell
 kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-containerd-monitoring.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap-monitoring.yaml
+```
+
+For monitoring fluentd with RBAC cluster:
+```shell
+kubectl apply -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/logzio-daemonset-rbac-monitoring.yaml -f https://raw.githubusercontent.com/logzio/logzio-k8s/master/configmap-monitoring.yaml
 ```
 
 #### 4.  Check Logz.io for your logs

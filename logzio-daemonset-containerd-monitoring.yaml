@@ -1,3 +1,4 @@
+# Exposes fluentd metrics on port 24231, /metrics.
 ---
 apiVersion: v1
 kind: ServiceAccount
