@@ -94,8 +94,6 @@ spec:
               key: logzio-log-listener
         - name: FLUENTD_SYSTEMD_CONF
           value: "disable"
-        - name: FLUENTD_PROMETHEUS_CONF
-          value: "disable"
         - name: INCLUDE_NAMESPACE
           value: ""
         - name: KUBERNETES_VERIFY_SSL
