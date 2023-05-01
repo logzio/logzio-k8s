@@ -14,7 +14,8 @@ RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
                   -o APT::AutoRemove::RecommendsImportant=false \
                   $buildDeps \
  && rm -rf /var/lib/apt/lists/* \
- && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem
+ && rm -rf /tmp/* /var/tmp/* /usr/lib/ruby/gems/*/cache/*.gem \
+ && gem cleanup fluent-plugin-logzio
 
 # Default values for fluent.conf
 ENV LOGZIO_BUFFER_TYPE "file"
