@@ -215,6 +215,9 @@ These templates collects and exposes fluentd metrics on port `24231`, `/metrics`
 
 ### Changelog
 **logzio/logzio-fluentd**:
+- v1.4.0:
+  - Upgrade gem `fluent-plugin-logzio` to `0.1.0`:
+    - Use fluentd's retry instead of retry in code (raise exception on non-2xx response).
 - v1.3.1:
   - Added `fluent-plugin-prometheus`.
   - Added `logzio-daemonset-containerd-monitoring`,  `logzio-daemonset-rbac-monitoring` and `configmap-monitoring.yaml` which exposes fluentd metrics on the pods port `24231`, `/metrics` endpoint
@@ -222,6 +225,10 @@ These templates collects and exposes fluentd metrics on port `24231`, `/metrics`
   - Added plugin `fluent-plugin-dedot_filter`.
   - Updated image in daemonset templates, increased memory and cpu requirements.
   - Added configuration for dedot plugin in configmp template.
+
+
+<details>
+  <summary markdown="span"> Expand to check old versions </summary>
 - v1.2.0:
   - Upgrade fluentd to 1.15.
   - Upgrade plugin `fluent-plugin-kubernetes_metadata_filter` to `3.1.2`([#80](https://github.com/logzio/logzio-k8s/pull/80)).
@@ -231,10 +238,6 @@ These templates collects and exposes fluentd metrics on port `24231`, `/metrics`
 - v1.1.0:
   - Upgrade base image to `v1.14`.
   - Upgrade `fluent-plugin-kubernetes_metadata_filter` to `2.10`.
-
-
-<details>
-  <summary markdown="span"> Expand to check old versions </summary>
 - v1.0.2:
   - The docker image is now available also for ARM architecture.
 - v1.0.1:
