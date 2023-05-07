@@ -81,10 +81,10 @@ jobs:
       - name: Create manifest version
         run: |
           docker buildx imagetools create -t ${{ steps.dockeraction.outputs.tags }} \
-          --amend ${{ steps.dockeraction.outputs.tags }}-arm \
-          --amend ${{ steps.dockeraction.outputs.tags }}-amd
+          ${{ steps.dockeraction.outputs.tags }}-arm \
+          ${{ steps.dockeraction.outputs.tags }}-amd
       - name: Create manifest latest
         run: |
           docker buildx imagetools create -t logzio/logzio-fluentd:latest \
-          --amend logzio/logzio-fluentd:latest-arm \
-          --amend logzio/logzio-fluentd:latest-amd
+          logzio/logzio-fluentd:latest-arm \
+          logzio/logzio-fluentd:latest-amd
