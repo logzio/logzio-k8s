@@ -79,15 +79,13 @@ jobs:
           tags: ${{ steps.dockeraction.outputs.tags }}-arm
           labels: ${{ steps.dockeraction.outputs.labels }}
 
-      - name: Create manifest version
+      - name: Create version
         run: |
-          docker manifest create ${{ steps.dockeraction.outputs.tags }} --amend ${{ steps.dockeraction.outputs.tags }}-arm --amend ${{ steps.dockeraction.outputs.tags }}-amd
-      - name: Create manifest latest
+          docker buildx imagetools create -t ${{ steps.dockeraction.outputs.tags }} \
+          ${{ steps.dockeraction.outputs.tags }}-arm \
+          ${{ steps.dockeraction.outputs.tags }}-amd
+      - name: Create latest
         run: |
-          docker manifest create public.ecr.aws/logzio/logzio-fluentd:latest --amend public.ecr.aws/logzio/logzio-fluentd:latest-arm --amend public.ecr.aws/logzio/logzio-fluentd:latest-amd
-      - name: Push manifest latest
-        run: |
-          docker manifest push public.ecr.aws/logzio/logzio-fluentd:latest
-      - name: Push manifest version
-        run: |
-          docker manifest push ${{ steps.dockeraction.outputs.tags }}
+          docker buildx imagetools create -t public.ecr.aws/logzio/logzio-fluentd:latest \
+          public.ecr.aws/logzio/logzio-fluentd:latest-arm \
+          public.ecr.aws/logzio/logzio-fluentd:latest-amd
