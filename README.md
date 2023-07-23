@@ -216,7 +216,8 @@ These templates collects and exposes fluentd metrics on port `24231`, `/metrics`
 ### Changelog
 **logzio/logzio-fluentd**:
 - **1.5.0**:
-  - Upgrade gem `fluent-plugin-logzio` to `0.2.1`:
+  - Upgrade fluentd to 1.16.
+  - Upgrade gem `fluent-plugin-logzio` to `0.2.2`:
     - Do not retry on 400 and 401. For 400 - try to fix log and resend.
     - Generate a metric (logzio_status_codes) for response codes from Logz.io.
 - v1.4.0:
