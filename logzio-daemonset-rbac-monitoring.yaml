@@ -77,7 +77,7 @@ spec:
               mountPath: /fluentd/etc
       containers:
       - name: fluentd
-        image: logzio/logzio-fluentd:1.5.1
+        image: logzio/logzio-fluentd:1.5.2
         ports:
         - name: metrics
           containerPort: 24231
