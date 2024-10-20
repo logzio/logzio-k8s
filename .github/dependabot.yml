@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "docker"
+    directory: "/" # Location of Dockerfile
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "fluentd version update:"
+    reviewers:
+      - "logzio/integration-developers"
+
+  - package-ecosystem: "github-actions"
+    directory: "/" # Location of GitHub Actions workflows
+    schedule:
+      interval: "weekly"
