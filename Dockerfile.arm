@@ -1,4 +1,4 @@
-FROM logzio/fluentd-kubernetes-daemonset-arm:v1.17.1-debian-logzio-arm64-1.1
+FROM logzio/fluentd-kubernetes-daemonset-arm:v1.18.0-debian-logzio-arm64-1.0
 
 USER root
 WORKDIR /fluentd
