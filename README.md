@@ -215,6 +215,9 @@ These templates collects and exposes fluentd metrics on port `24231`, `/metrics`
 
 ### Changelog
 **logzio/logzio-fluentd**:
+- **1.5.6**:
+  - Upgrade amd image to `v1.18.0-debian-logzio-amd64-1.3`.
+  - Upgrade arm image to `v1.18.0-debian-logzio-arm64-1.3`.
 - **1.5.5**:
   - Upgrade amd image to `v1.18.0-debian-logzio-amd64-1.0`.
   - Upgrade arm image to `v1.18.0-debian-logzio-arm64-1.0`.

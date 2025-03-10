@@ -47,7 +47,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.dockeraction.outputs.tags }}-amd
           labels: ${{ steps.dockeraction.outputs.labels }}
-
+          sbom: true
+          provenance: mode=max
 
       - name: Build and push amd64 latest
         uses: docker/build-push-action@v6
@@ -57,6 +58,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: logzio/logzio-fluentd:latest-amd
           labels: ${{ steps.dockeraction.outputs.labels }}
+          sbom: true
+          provenance: mode=max
 
       - name: Build and push arm64 latest
         uses: docker/build-push-action@v6
@@ -67,6 +70,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: logzio/logzio-fluentd:latest-arm
           labels: ${{ steps.dockeraction.outputs.labels }}
+          sbom: true
+          provenance: mode=max
 
       - name: Build and push arm64
         uses: docker/build-push-action@v6
@@ -77,6 +82,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.dockeraction.outputs.tags }}-arm
           labels: ${{ steps.dockeraction.outputs.labels }}
+          sbom: true
+          provenance: mode=max
 
       - name: Create manifest version
         run: |
